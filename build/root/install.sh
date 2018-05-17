@@ -19,7 +19,7 @@ mv /tmp/scripts-master/shell/arch/docker/*.sh /root/
 ####
 
 # define pacman packages
-pacman_packages="krusader p7zip unarj unzip unrar xz zip lhasa arj unace ntfs-3g kde-cli-tools kdiff3 keditbookmarks kompare konsole krename ktexteditor"
+pacman_packages="krusader p7zip unarj unzip unrar xz zip lhasa arj unace ntfs-3g kde-cli-tools kdiff3 keditbookmarks kompare konsole krename ktexteditor breeze-icons"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
@@ -54,8 +54,8 @@ cp /home/nobody/favicon.ico /usr/share/novnc/
 ####
 
 cat <<'EOF' > /tmp/startcmd_heredoc
-# run dbus as a session (terminates with app) for app krusader, used for this single auto start of krusader
-dbus-run-session -- krusader
+# launch krusader (we cannot simply call /usr/bin/krusader otherwise it wont run on startup)
+dbus-launch krusader
 EOF
 
 # replace startcmd placeholder string with contents of file (here doc)
@@ -132,9 +132,10 @@ fi
 echo "\${PUID}" > /tmp/puid
 echo "\${PGID}" > /tmp/pgid
 
+# env var required to find qt plugins when starting krusader
 export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt/plugins/platforms
 
-# env vars required to enable menu icons for krusader
+# env vars required to enable menu icons for krusader (also requires breeze-icons package)
 export KDE_SESSION_VERSION=5 KDE_FULL_SESSION=true
 
 EOF
