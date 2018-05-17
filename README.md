@@ -63,6 +63,8 @@ User ID (PUID) and Group ID (PGID) can be found by issuing the following command
 ```
 id <username>
 ```
+
+Running Krusader as user root is NOT recommended and may lead to problems, please use PUID and PGID to run as another user.
 ___
 If you appreciate my work, then please consider buying me a beer  :D
 

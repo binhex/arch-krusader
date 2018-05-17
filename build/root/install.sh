@@ -19,7 +19,7 @@ mv /tmp/scripts-master/shell/arch/docker/*.sh /root/
 ####
 
 # define pacman packages
-pacman_packages="krusader p7zip unarj unzip xz zip kde-cli-tools kdiff3 keditbookmarks kompare krename ktexteditor"
+pacman_packages="krusader p7zip unarj unzip unrar xz zip lhasa arj unace ntfs-3g kde-cli-tools kdiff3 keditbookmarks kompare konsole krename ktexteditor"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
@@ -39,7 +39,7 @@ source /root/aor.sh
 ####
 
 # define aur packages
-aur_packages="rar"
+aur_packages=""
 
 # call aur install script (arch user repo)
 source /root/aur.sh
@@ -50,13 +50,28 @@ source /root/aur.sh
 # overwrite novnc favicon with application favicon
 cp /home/nobody/favicon.ico /usr/share/novnc/
 
+# config krusader
+####
+
+cat <<'EOF' > /tmp/startcmd_heredoc
+# run dbus as a session (terminates with app) for app krusader, used for this single auto start of krusader
+dbus-run-session -- krusader
+EOF
+
+# replace startcmd placeholder string with contents of file (here doc)
+sed -i '/# STARTCMD_PLACEHOLDER/{
+    s/# STARTCMD_PLACEHOLDER//g
+    r /tmp/startcmd_heredoc
+}' /home/nobody/start.sh
+rm /tmp/startcmd_heredoc
+
 # config openbox
 ####
 
 cat <<'EOF' > /tmp/menu_heredoc
     <item label="Krusader">
     <action name="Execute">
-      <command>/usr/bin/krusader</command>
+      <command>dbus-launch krusader</command>
       <startupnotify>
         <enabled>yes</enabled>
       </startupnotify>
@@ -118,6 +133,9 @@ echo "\${PUID}" > /tmp/puid
 echo "\${PGID}" > /tmp/pgid
 
 export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt/plugins/platforms
+
+# env vars required to enable menu icons for krusader
+export KDE_SESSION_VERSION=5 KDE_FULL_SESSION=true
 
 EOF
 
