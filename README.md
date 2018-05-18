@@ -13,7 +13,6 @@ Latest stable Krusader release from Arch Linux.
 **Usage**
 ```
 docker run -d \
-    -p 5900:5900 \
     -p 6080:6080 \
     --name=<container name> \
     -v <path for config files>:/config \
@@ -29,7 +28,6 @@ Please replace all user variables in the above command defined by <> with the co
 **Example**
 ```
 docker run -d \
-    -p 5900:5900 \
     -p 6080:6080 \
     --name=krusader \
     -v /apps/docker/krusader:/config \
