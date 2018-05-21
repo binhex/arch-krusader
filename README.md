@@ -13,8 +13,10 @@ Latest stable Krusader release from Arch Linux.
 **Usage**
 ```
 docker run -d \
+    -p 5900:5900 \
     -p 6080:6080 \
     --name=<container name> \
+    --privileged=true \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
     -e UMASK=<umask for created files> \
@@ -28,8 +30,10 @@ Please replace all user variables in the above command defined by <> with the co
 **Example**
 ```
 docker run -d \
+    -p 5900:5900 \
     -p 6080:6080 \
     --name=krusader \
+    --privileged=true \
     -v /apps/docker/krusader:/config \
     -v /etc/localtime:/etc/localtime:ro \
     -e UMASK=000 \
