@@ -39,7 +39,7 @@ source /root/aor.sh
 ####
 
 # define aur packages
-aur_packages=""
+aur_packages="rar"
 
 # call aur install script (arch user repo)
 source /root/aur.sh
@@ -55,7 +55,8 @@ cp /home/nobody/favicon.ico /usr/share/novnc/
 
 cat <<'EOF' > /tmp/startcmd_heredoc
 # launch krusader (we cannot simply call /usr/bin/krusader otherwise it wont run on startup)
-dbus-launch krusader
+# note failure to launch krusader in the below manner will result in the classic xcb missing error
+dbus-run-session -- krusader
 EOF
 
 # replace startcmd placeholder string with contents of file (here doc)
