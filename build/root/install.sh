@@ -54,6 +54,32 @@ cp /home/nobody/favicon.ico /usr/share/novnc/
 ####
 
 cat <<'EOF' > /tmp/startcmd_heredoc
+# create folder to store krusader config file
+mkdir -p /config/krusader/
+
+# if krusader config file exists in container then rename
+if [[ -f "/home/nobody/.config/krusaderrc" && ! -L "/home/nobody/.config/krusaderrc" ]]; then
+    mv /home/nobody/.config/krusaderrc /home/nobody/.config/krusaderrc-backup 2>/dev/null || true
+fi
+
+# if krusader config file doesnt exist then copy default to host config volume
+if [[ ! -f "/config/krusader/krusaderrc" ]]; then
+
+    echo "[info] Krusader folder doesnt exist, copying default to /config/krusader/..."
+
+    if [[ -f "/home/nobody/.config/krusaderrc-backup" && ! -L "/home/nobody/.config/krusaderrc-backup" ]]; then
+        cp /home/nobody/.config/krusaderrc-backup /config/krusader/krusaderrc 2>/dev/null || true
+    fi
+
+else
+
+    echo "[info] Krusader config file already exists, skipping copy"
+
+fi
+
+# create soft link to krusader config file
+ln -fs /config/krusader/krusaderrc /home/nobody/.config/krusaderrc
+
 # launch krusader (we cannot simply call /usr/bin/krusader otherwise it wont run on startup)
 # note failure to launch krusader in the below manner will result in the classic xcb missing error
 dbus-run-session -- krusader
