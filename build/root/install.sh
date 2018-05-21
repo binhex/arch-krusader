@@ -39,7 +39,7 @@ source /root/aor.sh
 ####
 
 # define aur packages
-aur_packages=""
+aur_packages="rar"
 
 # call aur install script (arch user repo)
 source /root/aur.sh
@@ -54,8 +54,35 @@ cp /home/nobody/favicon.ico /usr/share/novnc/
 ####
 
 cat <<'EOF' > /tmp/startcmd_heredoc
+# create folder to store krusader config file
+mkdir -p /config/krusader/
+
+# if krusader config file exists in container then rename
+if [[ -f "/home/nobody/.config/krusaderrc" && ! -L "/home/nobody/.config/krusaderrc" ]]; then
+    mv /home/nobody/.config/krusaderrc /home/nobody/.config/krusaderrc-backup 2>/dev/null || true
+fi
+
+# if krusader config file doesnt exist then copy default to host config volume
+if [[ ! -f "/config/krusader/krusaderrc" ]]; then
+
+    echo "[info] Krusader folder doesnt exist, copying default to /config/krusader/..."
+
+    if [[ -f "/home/nobody/.config/krusaderrc-backup" && ! -L "/home/nobody/.config/krusaderrc-backup" ]]; then
+        cp /home/nobody/.config/krusaderrc-backup /config/krusader/krusaderrc 2>/dev/null || true
+    fi
+
+else
+
+    echo "[info] Krusader config file already exists, skipping copy"
+
+fi
+
+# create soft link to krusader config file
+ln -fs /config/krusader/krusaderrc /home/nobody/.config/krusaderrc
+
 # launch krusader (we cannot simply call /usr/bin/krusader otherwise it wont run on startup)
-dbus-launch krusader
+# note failure to launch krusader in the below manner will result in the classic xcb missing error
+dbus-run-session -- krusader
 EOF
 
 # replace startcmd placeholder string with contents of file (here doc)
@@ -89,7 +116,7 @@ rm /tmp/menu_heredoc
 # container perms
 ####
 
-# define comma separated list of paths 
+# define comma separated list of paths
 install_paths="/tmp,/usr/share/themes,/home/nobody,/usr/share/novnc,/usr/share/krusader,/usr/share/applications,/etc/xdg"
 
 # split comma separated string into list for install paths
@@ -119,7 +146,7 @@ cat <<EOF > /tmp/permissions_heredoc
 previous_puid=$(cat "/tmp/puid" 2>/dev/null)
 previous_pgid=$(cat "/tmp/pgid" 2>/dev/null)
 
-# if first run (no puid or pgid files in /tmp) or the PUID or PGID env vars are different 
+# if first run (no puid or pgid files in /tmp) or the PUID or PGID env vars are different
 # from the previous run then re-apply chown with current PUID and PGID values.
 if [[ ! -f "/tmp/puid" || ! -f "/tmp/pgid" || "\${previous_puid}" != "\${PUID}" || "\${previous_pgid}" != "\${PGID}" ]]; then
 
