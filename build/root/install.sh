@@ -116,7 +116,7 @@ rm /tmp/menu_heredoc
 # container perms
 ####
 
-# define comma separated list of paths 
+# define comma separated list of paths
 install_paths="/tmp,/usr/share/themes,/home/nobody,/usr/share/novnc,/usr/share/krusader,/usr/share/applications,/etc/xdg"
 
 # split comma separated string into list for install paths
@@ -146,7 +146,7 @@ cat <<EOF > /tmp/permissions_heredoc
 previous_puid=$(cat "/tmp/puid" 2>/dev/null)
 previous_pgid=$(cat "/tmp/pgid" 2>/dev/null)
 
-# if first run (no puid or pgid files in /tmp) or the PUID or PGID env vars are different 
+# if first run (no puid or pgid files in /tmp) or the PUID or PGID env vars are different
 # from the previous run then re-apply chown with current PUID and PGID values.
 if [[ ! -f "/tmp/puid" || ! -f "/tmp/pgid" || "\${previous_puid}" != "\${PUID}" || "\${previous_pgid}" != "\${PGID}" ]]; then
 
