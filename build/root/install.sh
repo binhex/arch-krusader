@@ -83,6 +83,7 @@ ln -fs /config/krusader/krusaderrc /home/nobody/.config/krusaderrc
 # launch krusader (we cannot simply call /usr/bin/krusader otherwise it wont run on startup)
 # note failure to launch krusader in the below manner will result in the classic xcb missing error
 dbus-run-session -- krusader
+
 EOF
 
 # replace startcmd placeholder string with contents of file (here doc)
@@ -143,8 +144,8 @@ chmod -R 775 ${install_paths}
 cat <<EOF > /tmp/permissions_heredoc
 
 # get previous puid/pgid (if first run then will be empty string)
-previous_puid=$(cat "/tmp/puid" 2>/dev/null)
-previous_pgid=$(cat "/tmp/pgid" 2>/dev/null)
+previous_puid=\$(cat "/tmp/puid" 2>/dev/null)
+previous_pgid=\$(cat "/tmp/pgid" 2>/dev/null)
 
 # if first run (no puid or pgid files in /tmp) or the PUID or PGID env vars are different
 # from the previous run then re-apply chown with current PUID and PGID values.
