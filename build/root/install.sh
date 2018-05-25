@@ -54,10 +54,6 @@ cp /home/nobody/favicon.ico /usr/share/novnc/
 ####
 
 cat <<'EOF' > /tmp/config_heredoc
-# create folder to store krusader configs
-mkdir -p /config/krusader/.config
-mkdir -p /config/krusader/.local
-
 # if /home/nobody/.config/ exists in container then suffix with -backup, this is used 
 # later on as a way of getting back to defaults if /config/krusader/.config is deleted
 # note we check that the folder is not a soft link (soft links persist reboots)
@@ -84,14 +80,14 @@ fi
 # note we do -L check as soft links are persistent between reboots
 if [[ ! -L "/home/nobody/.config" ]]; then
 	echo "[info] Creating soft link from /config/krusader/.config to /home/nobody/.config..."
-	rm -rf /home/nobody/.config/ && ln -sf /config/krusader/.config /home/nobody/.config
+	mkdir -p /config/krusader/.config ; rm -rf /home/nobody/.config/ ; ln -sf /config/krusader/.config /home/nobody/.config
 fi
 
 # create soft link to /home/nobody/.local folder storing krusader ui and bookmarks
 # note we do -L check as soft links are persistent between reboots
 if [[ ! -L "/home/nobody/.local" ]]; then
 	echo "[info] Creating soft link from /config/krusader/.local to /home/nobody/.local..."
-	rm -rf /home/nobody/.local/ && ln -sf /config/krusader/.local /home/nobody/.local
+	mkdir -p /config/krusader/.local ; rm -rf /home/nobody/.local/ ; ln -sf /config/krusader/.local /home/nobody/.local
 fi
 EOF
 
