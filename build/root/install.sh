@@ -53,43 +53,65 @@ cp /home/nobody/favicon.ico /usr/share/novnc/
 # config krusader
 ####
 
-cat <<'EOF' > /tmp/startcmd_heredoc
-# create folder to store krusader config file
-mkdir -p /config/krusader/
+cat <<'EOF' > /tmp/config_heredoc
+# create folder to store krusader configs
+mkdir -p /config/krusader/.config
+mkdir -p /config/krusader/.local
 
-# if krusader config file exists in container then rename
-if [[ -f "/home/nobody/.config/krusaderrc" && ! -L "/home/nobody/.config/krusaderrc" ]]; then
-    mv /home/nobody/.config/krusaderrc /home/nobody/.config/krusaderrc-backup 2>/dev/null || true
+# if /home/nobody/.config/ exists in container then suffix with -backup, this is used 
+# later on as a way of getting back to defaults if /config/krusader/.config is deleted
+# note we check that the folder is not a soft link (soft links persist reboots)
+if [[ -d "/home/nobody/.config" && ! -L "/home/nobody/.config" ]]; then
+	echo "[info] /home/nobody/.config folder storing Krusader general settings already exists, renaming folder..."
+	mv /home/nobody/.config /home/nobody/.config-backup
 fi
 
-# if krusader config file doesnt exist then copy default to host config volume
-if [[ ! -f "/config/krusader/krusaderrc" ]]; then
+# if /config/krusader/.config doesnt exist then restore from backup (see note above)
+if [[ ! -d "/config/krusader/.config" ]]; then
 
-    echo "[info] Krusader folder doesnt exist, copying default to /config/krusader/..."
-
-    if [[ -f "/home/nobody/.config/krusaderrc-backup" && ! -L "/home/nobody/.config/krusaderrc-backup" ]]; then
-        cp /home/nobody/.config/krusaderrc-backup /config/krusader/krusaderrc 2>/dev/null || true
-    fi
+	if [[ -d "/home/nobody/.config-backup" && ! -L "/home/nobody/.config-backup" ]]; then
+		echo "[info] /config/krusader/.config folder storing Krusader general settings does not exist, copying defaults..."
+		cp -R /home/nobody/.config-backup /config/krusader/.config
+	fi
 
 else
 
-    echo "[info] Krusader config file already exists, skipping copy"
+	echo "[info] /config/krusader/.config folder storing Krusader general settings already exists, skipping copy"
 
 fi
 
-# create soft link to krusader config file
-ln -fs /config/krusader/krusaderrc /home/nobody/.config/krusaderrc
+# create soft link to /home/nobody/.config folder storing krusader general settings
+# note we do -L check as soft links are persistent between reboots
+if [[ ! -L "/home/nobody/.config" ]]; then
+	echo "[info] Creating soft link from /config/krusader/.config to /home/nobody/.config..."
+	rm -rf /home/nobody/.config/ && ln -sf /config/krusader/.config /home/nobody/.config
+fi
 
+# create soft link to /home/nobody/.local folder storing krusader ui and bookmarks
+# note we do -L check as soft links are persistent between reboots
+if [[ ! -L "/home/nobody/.local" ]]; then
+	echo "[info] Creating soft link from /config/krusader/.local to /home/nobody/.local..."
+	rm -rf /home/nobody/.local/ && ln -sf /config/krusader/.local /home/nobody/.local
+fi
+EOF
+
+# replace config placeholder string with contents of file (here doc)
+sed -i '/# CONFIG_PLACEHOLDER/{
+	s/# CONFIG_PLACEHOLDER//g
+	r /tmp/config_heredoc
+}' /home/nobody/start.sh
+rm /tmp/config_heredoc
+
+cat <<'EOF' > /tmp/startcmd_heredoc
 # launch krusader (we cannot simply call /usr/bin/krusader otherwise it wont run on startup)
 # note failure to launch krusader in the below manner will result in the classic xcb missing error
 dbus-run-session -- krusader
-
 EOF
 
 # replace startcmd placeholder string with contents of file (here doc)
 sed -i '/# STARTCMD_PLACEHOLDER/{
-    s/# STARTCMD_PLACEHOLDER//g
-    r /tmp/startcmd_heredoc
+	s/# STARTCMD_PLACEHOLDER//g
+	r /tmp/startcmd_heredoc
 }' /home/nobody/start.sh
 rm /tmp/startcmd_heredoc
 
@@ -97,22 +119,39 @@ rm /tmp/startcmd_heredoc
 ####
 
 cat <<'EOF' > /tmp/menu_heredoc
-    <item label="Krusader">
-    <action name="Execute">
-      <command>dbus-launch krusader</command>
-      <startupnotify>
-        <enabled>yes</enabled>
-      </startupnotify>
-    </action>
-    </item>
+	<item label="Krusader">
+	<action name="Execute">
+	  <command>dbus-launch krusader</command>
+	  <startupnotify>
+		<enabled>yes</enabled>
+	  </startupnotify>
+	</action>
+	</item>
 EOF
 
 # replace menu placeholder string with contents of file (here doc)
 sed -i '/<!-- APPLICATIONS_PLACEHOLDER -->/{
-    s/<!-- APPLICATIONS_PLACEHOLDER -->//g
-    r /tmp/menu_heredoc
+	s/<!-- APPLICATIONS_PLACEHOLDER -->//g
+	r /tmp/menu_heredoc
 }' /home/nobody/.config/openbox/menu.xml
 rm /tmp/menu_heredoc
+
+# env vars
+####
+
+cat <<'EOF' > /tmp/envvars_heredoc
+export WEBPAGE_TITLE=$(echo "${WEBPAGE_TITLE}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+if [[ ! -z "${WEBPAGE_TITLE}" ]]; then
+	echo "[info] WEBPAGE_TITLE defined as '${WEBPAGE_TITLE}'" | ts '%Y-%m-%d %H:%M:%.S'
+fi
+EOF
+
+# replace env vars placeholder string with contents of file (here doc)
+sed -i '/<!-- ENVVARS_PLACEHOLDER -->/{
+	s/<!-- ENVVARS_PLACEHOLDER -->//g
+	r /tmp/envvars_heredoc
+}' /root/init.sh
+rm /tmp/envvars_heredoc
 
 # container perms
 ####
@@ -165,13 +204,12 @@ export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt/plugins/platforms
 
 # env vars required to enable menu icons for krusader (also requires breeze-icons package)
 export KDE_SESSION_VERSION=5 KDE_FULL_SESSION=true
-
 EOF
 
 # replace permissions placeholder string with contents of file (here doc)
 sed -i '/# PERMISSIONS_PLACEHOLDER/{
-    s/# PERMISSIONS_PLACEHOLDER//g
-    r /tmp/permissions_heredoc
+	s/# PERMISSIONS_PLACEHOLDER//g
+	r /tmp/permissions_heredoc
 }' /root/init.sh
 rm /tmp/permissions_heredoc
 
