@@ -140,6 +140,16 @@ export WEBPAGE_TITLE=$(echo "${WEBPAGE_TITLE}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~
 if [[ ! -z "${WEBPAGE_TITLE}" ]]; then
 	echo "[info] WEBPAGE_TITLE defined as '${WEBPAGE_TITLE}'" | ts '%Y-%m-%d %H:%M:%.S'
 fi
+
+export TEMP_FOLDER=$(echo "${TEMP_FOLDER}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+if [[ ! -z "${TEMP_FOLDER}" ]]; then
+	echo "[info] TEMP_FOLDER defined as '${TEMP_FOLDER}'" | ts '%Y-%m-%d %H:%M:%.S'
+else
+	export TEMP_FOLDER="/config/krusader/tmp"
+	echo "[info] TEMP_FOLDER not defined, defaulting to '${TEMP_FOLDER}'" | ts '%Y-%m-%d %H:%M:%.S'
+fi
+# create temp folder
+mkdir -p "${TEMP_FOLDER}"
 EOF
 
 # replace env vars placeholder string with contents of file (here doc)
