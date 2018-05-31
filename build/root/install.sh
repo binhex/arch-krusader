@@ -64,16 +64,12 @@ fi
 
 # if /config/krusader/.config doesnt exist then restore from backup (see note above)
 if [[ ! -d "/config/krusader/.config" ]]; then
-
 	if [[ -d "/home/nobody/.config-backup" && ! -L "/home/nobody/.config-backup" ]]; then
 		echo "[info] /config/krusader/.config folder storing Krusader general settings does not exist, copying defaults..."
 		cp -R /home/nobody/.config-backup /config/krusader/.config
 	fi
-
 else
-
 	echo "[info] /config/krusader/.config folder storing Krusader general settings already exists, skipping copy"
-
 fi
 
 # create soft link to /home/nobody/.config folder storing krusader general settings
@@ -96,12 +92,16 @@ fi
 # path to krusader config file
 krusader_config_path="/config/krusader/.config/krusaderrc"
 
+# create the krusader config file (will not exist on first run)
+touch "${krusader_config_path}"
+
 # search for [General] section (may not be defined)
 grep -q "^\[General\]" "${krusader_config_path}"
 
 if [[ "${?}" -eq 0 ]]; then
     # search for Temp Directory
     grep -q "^Temp Directory" "${krusader_config_path}"
+
     if [[ "${?}" -eq 0 ]]; then
         # overwrite defined value for Temp Directory
         sed -i "s~^Temp Directory.*~Temp Directory=${TEMP_FOLDER}~g" "${krusader_config_path}"
@@ -109,6 +109,7 @@ if [[ "${?}" -eq 0 ]]; then
         # append Temp Directory after [General] section
         sed -i "/\[General\]/a Temp Directory=${TEMP_FOLDER}" "${krusader_config_path}"
     fi
+
 else
     # append [General] section and Temp Directory to config file
     printf "\n[General]\nTemp Directory=${TEMP_FOLDER}\n" >> "${krusader_config_path}"
@@ -172,13 +173,14 @@ else
 	export TEMP_FOLDER="/config/krusader/tmp"
 	echo "[info] TEMP_FOLDER not defined, defaulting to '${TEMP_FOLDER}'" | ts '%Y-%m-%d %H:%M:%.S'
 fi
+
 # create temp folder
 mkdir -p "${TEMP_FOLDER}"
 EOF
 
 # replace env vars placeholder string with contents of file (here doc)
-sed -i '/<!-- ENVVARS_PLACEHOLDER -->/{
-	s/<!-- ENVVARS_PLACEHOLDER -->//g
+sed -i '/# ENVVARS_PLACEHOLDER/{
+	s/# ENVVARS_PLACEHOLDER//g
 	r /tmp/envvars_heredoc
 }' /root/init.sh
 rm /tmp/envvars_heredoc
