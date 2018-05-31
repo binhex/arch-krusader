@@ -89,6 +89,30 @@ if [[ ! -L "/home/nobody/.local" ]]; then
 	echo "[info] Creating soft link from /config/krusader/.local to /home/nobody/.local..."
 	mkdir -p /config/krusader/.local ; rm -rf /home/nobody/.local/ ; ln -sf /config/krusader/.local /home/nobody/.local
 fi
+
+# the below code changes the temp folder for krusader to the value defined via the env var
+# TEMP_FOLDER, if not defined it will use the default value (see env vars heredoc)
+
+# path to krusader config file
+krusader_config_path="/config/krusader/.config/krusaderrc"
+
+# search for [General] section (may not be defined)
+grep -q "^\[General\]" "${krusader_config_path}"
+
+if [[ "${?}" -eq 0 ]]; then
+    # search for Temp Directory
+    grep -q "^Temp Directory" "${krusader_config_path}"
+    if [[ "${?}" -eq 0 ]]; then
+        # overwrite defined value for Temp Directory
+        sed -i "s~^Temp Directory.*~Temp Directory=${TEMP_FOLDER}~g" "${krusader_config_path}"
+    else
+        # append Temp Directory after [General] section
+        sed -i "/\[General\]/a Temp Directory=${TEMP_FOLDER}" "${krusader_config_path}"
+    fi
+else
+    # append [General] section and Temp Directory to config file
+    printf "\n[General]\nTemp Directory=${TEMP_FOLDER}\n" >> "${krusader_config_path}"
+fi
 EOF
 
 # replace config placeholder string with contents of file (here doc)
