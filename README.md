@@ -19,6 +19,7 @@ docker run -d \
     --privileged=true \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
+    -e TEMP_FOLDER=<folder to store krusader temp files> \
     -e WEBPAGE_TITLE=<name shown in browser tab> \
     -e UMASK=<umask for created files> \
     -e PUID=<uid for user> \
@@ -37,6 +38,7 @@ docker run -d \
     --privileged=true \
     -v /apps/docker/krusader:/config \
     -v /etc/localtime:/etc/localtime:ro \
+    -e TEMP_FOLDER=/config/krusader/tmp \
     -e WEBPAGE_TITLE=Tower \
     -e UMASK=000 \
     -e PUID=0 \
