@@ -21,6 +21,7 @@ docker run -d \
     -v /etc/localtime:/etc/localtime:ro \
     -e TEMP_FOLDER=<folder to store krusader temp files> \
     -e WEBPAGE_TITLE=<name shown in browser tab> \
+    -e VNC_PASSWORD=<password for web ui> \
     -e UMASK=<umask for created files> \
     -e PUID=<uid for user> \
     -e PGID=<gid for user> \
@@ -40,11 +41,14 @@ docker run -d \
     -v /etc/localtime:/etc/localtime:ro \
     -e TEMP_FOLDER=/config/krusader/tmp \
     -e WEBPAGE_TITLE=Tower \
+    -e VNC_PASSWORD=mypassword \
     -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
     binhex/arch-krusader
 ```
+
+If you do specify a password for the web ui via the env var 'VNC_PASSWORD' then it MUST be 6 characters or longer, otherwise it will be ignored.
 
 **Access via web interface (noVNC)**
 
