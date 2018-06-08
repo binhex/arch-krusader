@@ -161,16 +161,6 @@ rm /tmp/menu_heredoc
 ####
 
 cat <<'EOF' > /tmp/envvars_heredoc
-export WEBPAGE_TITLE=$(echo "${WEBPAGE_TITLE}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-if [[ ! -z "${WEBPAGE_TITLE}" ]]; then
-	echo "[info] WEBPAGE_TITLE defined as '${WEBPAGE_TITLE}'" | ts '%Y-%m-%d %H:%M:%.S'
-fi
-
-export VNC_PASSWORD=$(echo "${VNC_PASSWORD}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-if [[ ! -z "${VNC_PASSWORD}" ]]; then
-	echo "[info] VNC_PASSWORD defined as '${VNC_PASSWORD}'" | ts '%Y-%m-%d %H:%M:%.S'
-fi
-
 export TEMP_FOLDER=$(echo "${TEMP_FOLDER}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 if [[ ! -z "${TEMP_FOLDER}" ]]; then
 	echo "[info] TEMP_FOLDER defined as '${TEMP_FOLDER}'" | ts '%Y-%m-%d %H:%M:%.S'
