@@ -47,8 +47,8 @@ source /root/aur.sh
 # config novnc
 ###
 
-# overwrite novnc favicon with application favicon
-cp /home/nobody/favicon.ico /usr/share/novnc/
+# overwrite novnc 16x16 icon with application specific 16x16 icon (used by bookmarks and favorites)
+cp /home/nobody/novnc-16x16.png /usr/share/novnc/app/images/icons/
 
 # config krusader
 ####
