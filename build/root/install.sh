@@ -64,7 +64,7 @@ fi
 
 # if /config/krusader/.config doesnt exist then restore from backup (see note above)
 if [[ ! -d "/config/krusader/.config" ]]; then
-	if [[ -d "/home/nobody/.config-backup" && ! -L "/home/nobody/.config-backup" ]]; then
+	if [[ -d "/home/nobody/.config-backup" ]]; then
 		echo "[info] /config/krusader/.config folder storing Krusader general settings does not exist, copying defaults..."
 		cp -R /home/nobody/.config-backup /config/krusader/.config
 	fi
@@ -73,18 +73,12 @@ else
 fi
 
 # create soft link to /home/nobody/.config folder storing krusader general settings
-# note we do -L check as soft links are persistent between reboots
-if [[ ! -L "/home/nobody/.config" ]]; then
-	echo "[info] Creating soft link from /config/krusader/.config to /home/nobody/.config..."
-	mkdir -p /config/krusader/.config ; rm -rf /home/nobody/.config/ ; ln -sf /config/krusader/.config /home/nobody/.config
-fi
+echo "[info] Creating soft link from /config/krusader/.config to /home/nobody/.config..."
+mkdir -p /config/krusader/.config ; rm -rf /home/nobody/.config ; ln -s /config/krusader/.config/ /home/nobody/
 
 # create soft link to /home/nobody/.local folder storing krusader ui and bookmarks
-# note we do -L check as soft links are persistent between reboots
-if [[ ! -L "/home/nobody/.local" ]]; then
-	echo "[info] Creating soft link from /config/krusader/.local to /home/nobody/.local..."
-	mkdir -p /config/krusader/.local ; rm -rf /home/nobody/.local/ ; ln -sf /config/krusader/.local /home/nobody/.local
-fi
+echo "[info] Creating soft link from /config/krusader/.local to /home/nobody/.local..."
+mkdir -p /config/krusader/.local ; rm -rf /home/nobody/.local ; ln -s /config/krusader/.local/ /home/nobody/
 
 # the below code changes the temp folder for krusader to the value defined via the env var
 # TEMP_FOLDER, if not defined it will use the default value (see env vars heredoc)
