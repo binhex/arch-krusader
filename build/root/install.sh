@@ -3,6 +3,13 @@
 # exit script if return code != 0
 set -e
 
+# resetting to live repo and using pacman for this app.
+echo 'Server = http://mirror.bytemark.co.uk/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
+echo 'Server = http://archlinux.mirrors.uk2.net/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
+
+# sync package databases for pacman
+pacman -Syyu --noconfirm
+
 # build scripts
 ####
 
@@ -19,7 +26,7 @@ mv /tmp/scripts-master/shell/arch/docker/*.sh /root/
 ####
 
 # define pacman packages
-pacman_packages="krusader p7zip unarj unzip unrar xz zip lhasa arj unace ntfs-3g kde-cli-tools kuiserver kio-extras kdiff3 keditbookmarks kompare konsole krename ktexteditor breeze-icons"
+pacman_packages="krusader p7zip unarj unzip rar unrar xz zip lhasa arj unace ntfs-3g kde-cli-tools kuiserver kio-extras kdiff3 keditbookmarks kompare konsole krename ktexteditor breeze-icons"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
@@ -39,7 +46,7 @@ source /root/aor.sh
 ####
 
 # define aur packages
-aur_packages="rar"
+aur_packages=""
 
 # call aur install script (arch user repo)
 source /root/aur.sh
