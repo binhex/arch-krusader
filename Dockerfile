@@ -1,4 +1,4 @@
-FROM binhex/arch-basegui
+FROM binhex/arch-basegui:latest
 MAINTAINER binhex
 
 # additional files
