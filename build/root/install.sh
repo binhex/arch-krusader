@@ -3,16 +3,6 @@
 # exit script if return code != 0
 set -e
 
-# resetting to live repo and using pacman for this app.
-echo 'Server = http://mirror.bytemark.co.uk/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
-echo 'Server = http://archlinux.mirrors.uk2.net/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
-
-# download fresh package databases from the server
-pacman -Fyy --noconfirm
-
-# sync package databases for pacman
-pacman -Syyu --noconfirm
-
 # build scripts
 ####
 
@@ -27,6 +17,9 @@ mv /tmp/scripts-master/shell/arch/docker/*.sh /root/
 
 # pacman packages
 ####
+
+# call pacman db and package updater script
+source /root/upd.sh
 
 # define pacman packages
 pacman_packages="krusader p7zip unarj unzip unrar xz zip lhasa arj unace ntfs-3g kde-cli-tools kuiserver kio-extras kdiff3 keditbookmarks kompare konsole krename ktexteditor breeze-icons"
