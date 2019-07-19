@@ -13,13 +13,13 @@ curl --connect-timeout 5 --max-time 600 --retry 5 --retry-delay 0 --retry-max-ti
 unzip /tmp/scripts-master.zip -d /tmp
 
 # move shell scripts to /root
-mv /tmp/scripts-master/shell/arch/docker/*.sh /root/
+mv /tmp/scripts-master/shell/arch/docker/*.sh /usr/local/bin/
 
 # pacman packages
 ####
 
 # call pacman db and package updater script
-source /root/upd.sh
+source upd.sh
 
 # define pacman packages
 pacman_packages="krusader p7zip unarj unzip unrar xz zip lhasa arj unace ntfs-3g kde-cli-tools kuiserver kio-extras kdiff3 keditbookmarks kompare konsole krename ktexteditor breeze-icons"
@@ -36,7 +36,7 @@ fi
 aur_packages=""
 
 # call aur install script (arch user repo)
-source /root/aur.sh
+source aur.sh
 
 # config novnc
 ###
@@ -165,7 +165,7 @@ EOF
 sed -i '/# ENVVARS_PLACEHOLDER/{
 	s/# ENVVARS_PLACEHOLDER//g
 	r /tmp/envvars_heredoc
-}' /root/init.sh
+}' init.sh
 rm /tmp/envvars_heredoc
 
 # container perms
@@ -225,7 +225,7 @@ EOF
 sed -i '/# PERMISSIONS_PLACEHOLDER/{
 	s/# PERMISSIONS_PLACEHOLDER//g
 	r /tmp/permissions_heredoc
-}' /root/init.sh
+}' init.sh
 rm /tmp/permissions_heredoc
 
 # env vars
