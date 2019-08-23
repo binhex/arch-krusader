@@ -22,7 +22,7 @@ mv /tmp/scripts-master/shell/arch/docker/*.sh /usr/local/bin/
 source upd.sh
 
 # define pacman packages
-pacman_packages="krusader p7zip unarj unzip unrar xz zip lhasa arj unace ntfs-3g kde-cli-tools kuiserver kio-extras kdiff3 keditbookmarks kompare konsole krename ktexteditor breeze-icons"
+pacman_packages="krusader p7zip unarj xz zip lhasa arj unace ntfs-3g kde-cli-tools kuiserver kio-extras kdiff3 keditbookmarks kompare konsole krename ktexteditor breeze-icons"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
