@@ -60,7 +60,7 @@ fi
 if [[ ! -d "/config/krusader/.config" ]]; then
 	if [[ -d "/home/nobody/.config-backup" ]]; then
 		echo "[info] /config/krusader/.config folder storing Krusader general settings does not exist, copying defaults..."
-		cp -R /home/nobody/.config-backup /config/krusader/.config
+		mkdir -p /config/krusader ; cp -R /home/nobody/.config-backup /config/krusader/.config
 	fi
 else
 	echo "[info] /config/krusader/.config folder storing Krusader general settings already exists, skipping copy"
