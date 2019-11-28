@@ -102,6 +102,10 @@ else
     # append [General] section and Temp Directory to config file
     printf "\n[General]\nTemp Directory=${TEMP_FOLDER}\n" >> "${krusader_config_path}"
 fi
+
+# finally make the temp directory
+mkdir -p "${TEMP_FOLDER}"
+
 EOF
 
 # replace config placeholder string with contents of file (here doc)
@@ -156,9 +160,6 @@ else
 	export TEMP_FOLDER="/config/krusader/tmp"
 	echo "[info] TEMP_FOLDER not defined, defaulting to '${TEMP_FOLDER}'" | ts '%Y-%m-%d %H:%M:%.S'
 fi
-
-# create temp folder
-mkdir -p "${TEMP_FOLDER}"
 EOF
 
 # replace env vars placeholder string with contents of file (here doc)
