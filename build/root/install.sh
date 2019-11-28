@@ -33,7 +33,7 @@ fi
 ####
 
 # define aur packages
-aur_packages=""
+aur_packages="websockify"
 
 # call aur install script (arch user repo)
 source aur.sh
