@@ -48,37 +48,18 @@ cp /home/nobody/novnc-16x16.png /usr/share/webapps/novnc/app/images/icons/
 ####
 
 cat <<'EOF' > /tmp/config_heredoc
-# if /home/nobody/.config/ exists in container then suffix with -backup, this is used 
-# later on as a way of getting back to defaults if /config/krusader/.config is deleted
-# note we check that the folder is not a soft link (soft links persist reboots)
-if [[ -d "/home/nobody/.config" && ! -L "/home/nobody/.config" ]]; then
-	echo "[info] /home/nobody/.config folder storing Krusader general settings already exists, renaming folder..."
-	mv /home/nobody/.config /home/nobody/.config-backup
-fi
 
-# if /config/krusader/.config doesnt exist then restore from backup (see note above)
-if [[ ! -d "/config/krusader/.config" ]]; then
-	if [[ -d "/home/nobody/.config-backup" ]]; then
-		echo "[info] /config/krusader/.config folder storing Krusader general settings does not exist, copying defaults..."
-		mkdir -p /config/krusader ; cp -R /home/nobody/.config-backup /config/krusader/.config
-	fi
-else
-	echo "[info] /config/krusader/.config folder storing Krusader general settings already exists, skipping copy"
-fi
-
-# create soft link to /home/nobody/.config folder storing krusader general settings
-echo "[info] Creating soft link from /config/krusader/.config to /home/nobody/.config..."
-mkdir -p /config/krusader/.config ; rm -rf /home/nobody/.config ; ln -s /config/krusader/.config/ /home/nobody/
-
-# create soft link to /home/nobody/.local folder storing krusader ui and bookmarks
-echo "[info] Creating soft link from /config/krusader/.local to /home/nobody/.local..."
-mkdir -p /config/krusader/.local ; rm -rf /home/nobody/.local ; ln -s /config/krusader/.local/ /home/nobody/
+# delme 10/12/2020
+# this code moves any existing krusader config over to the new /config/home folder
+cp -R /config/krusader/.config/ /config/home/ && rm -rf /config/krusader/.config
+cp -R /config/krusader/.local/ /config/home/ && rm -rf /config/krusader/.local
+# /delme 10/12/2020
 
 # the below code changes the temp folder for krusader to the value defined via the env var
 # TEMP_FOLDER, if not defined it will use the default value (see env vars heredoc)
 
 # path to krusader config file
-krusader_config_path="/config/krusader/.config/krusaderrc"
+krusader_config_path="/config/home/.config/krusaderrc"
 
 # create the krusader config file (will not exist on first run)
 touch "${krusader_config_path}"
