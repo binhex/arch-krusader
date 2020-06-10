@@ -154,7 +154,7 @@ export TEMP_FOLDER=$(echo "${TEMP_FOLDER}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 if [[ ! -z "${TEMP_FOLDER}" ]]; then
 	echo "[info] TEMP_FOLDER defined as '${TEMP_FOLDER}'" | ts '%Y-%m-%d %H:%M:%.S'
 else
-	export TEMP_FOLDER="/config/krusader/tmp"
+	export TEMP_FOLDER="/config/home/.config/krusader/tmp"
 	echo "[info] TEMP_FOLDER not defined, defaulting to '${TEMP_FOLDER}'" | ts '%Y-%m-%d %H:%M:%.S'
 fi
 EOF
