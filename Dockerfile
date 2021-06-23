@@ -1,5 +1,5 @@
 FROM binhex/arch-int-gui:latest
-MAINTAINER binhex
+LABEL org.opencontainers.image.authors="binhex"
 
 # additional files
 ##################
