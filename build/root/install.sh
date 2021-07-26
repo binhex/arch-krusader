@@ -216,8 +216,5 @@ sed -i '/# PERMISSIONS_PLACEHOLDER/{
 }' /usr/local/bin/init.sh
 rm /tmp/permissions_heredoc
 
-# env vars
-####
-
 # cleanup
 cleanup.sh
