@@ -21,12 +21,6 @@ RUN chmod +x /root/*.sh && \
 # docker settings
 #################
 
-# map /config to host defined config path (used to store configuration from app)
-VOLUME /config
-
-# map /data to host defined config path (used to store data from app)
-VOLUME /data
-
 # set permissions
 #################
 
