@@ -8,6 +8,9 @@ LABEL org.opencontainers.image.source = "https://github.com/binhex/arch-krusader
 # add install and packer bash script
 ADD build/root/*.sh /root/
 
+# get release tag name from build arg
+ARG release_tag_name
+
 # add pre-configured config files for deluge
 ADD config/nobody/ /home/nobody/
 
@@ -16,7 +19,7 @@ ADD config/nobody/ /home/nobody/
 
 # make executable and run bash scripts to install app
 RUN chmod +x /root/*.sh && \
-	/bin/bash /root/install.sh
+	/bin/bash /root/install.sh "${release_tag_name}"
 
 # docker settings
 #################
