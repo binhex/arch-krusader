@@ -17,7 +17,7 @@ unzip /tmp/scripts-master.zip -d /tmp
 
 # move shell scripts to /usr/local/bin (-n = do not overwrite
 # exsting files, required as init.sh written to via arch-int-gui)
-mv -n /tmp/scripts-master/shell/arch/docker/*.sh /usr/local/bin/
+mv -n /tmp/scripts-master/shell/arch/docker/*.sh /usr/local/bin/ || true
 
 # detect image arch
 ####
