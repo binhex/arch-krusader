@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.source = "https://github.com/binhex/arch-krusader
 ADD build/root/*.sh /root/
 
 # get release tag name from build arg
-ARG release_tag_name
+arg RELEASETAG
 
 # add pre-configured config files for deluge
 ADD config/nobody/ /home/nobody/
