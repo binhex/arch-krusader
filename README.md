@@ -22,7 +22,7 @@ docker run -d \
     -e TEMP_FOLDER=<folder to store krusader temp files> \
     -e WEBPAGE_TITLE=<name shown in browser tab> \
     -e VNC_PASSWORD=<password for web ui> \
-    -e ENABLE_STARTUP_SCRIPTS=<install additional packages> \
+    -e ENABLE_STARTUP_SCRIPTS=<yes|no> \
     -e UMASK=<umask for created files> \
     -e PUID=<uid for user> \
     -e PGID=<gid for user> \
