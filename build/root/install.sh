@@ -67,11 +67,6 @@ cp /home/nobody/novnc-16x16.png /usr/share/webapps/novnc/app/images/icons/
 
 cat <<'EOF' > /tmp/config_heredoc
 
-# delme 10/12/2020
-# this code moves any existing krusader config over to the new /config/home folder
-cp -R /config/krusader/.config/ /config/home/ && rm -rf /config/krusader/.config
-cp -R /config/krusader/.local/ /config/home/ && rm -rf /config/krusader/.local
-# /delme 10/12/2020
 
 # the below code changes the temp folder for krusader to the value defined via the env var
 # TEMP_FOLDER, if not defined it will use the default value (see env vars heredoc)
