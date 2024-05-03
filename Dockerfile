@@ -14,8 +14,8 @@ ARG TARGETARCH
 # add install and packer bash script
 ADD build/root/*.sh /root/
 
-# add pre-configured config files for deluge
-ADD config/nobody/ /home/nobody/
+# add pre-configured config
+ADD config/nobody/* /home/nobody/
 
 # install app
 #############
