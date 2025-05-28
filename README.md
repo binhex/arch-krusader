@@ -20,6 +20,8 @@ docker run -d \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
     -e TEMP_FOLDER=<folder to store krusader temp files> \
+    -e HTTPS_CERT_PATH=<path to cert file> \
+    -e HTTPS_KEY_PATH=<path to key file> \
     -e WEBPAGE_TITLE=<name shown in browser tab> \
     -e VNC_PASSWORD=<password for web ui> \
     -e ENABLE_STARTUP_SCRIPTS=<yes|no> \
