@@ -32,6 +32,8 @@ docker run -d \
     -e WEBPAGE_TITLE=<name shown in browser tab> \
     -e VNC_PASSWORD=<password for web ui> \
     -e ENABLE_STARTUP_SCRIPTS=<yes|no> \
+    -e HEALTHCHECK_COMMAND=<command> \
+    -e HEALTHCHECK_ACTION=<action> \
     -e UMASK=<umask for created files> \
     -e WEBUI_PORT=<port> \
     -e PUID=<uid for user> \
