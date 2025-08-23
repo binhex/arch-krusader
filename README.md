@@ -34,6 +34,7 @@ docker run -d \
     -e ENABLE_STARTUP_SCRIPTS=<yes|no> \
     -e HEALTHCHECK_COMMAND=<command> \
     -e HEALTHCHECK_ACTION=<action> \
+    -e HEALTHCHECK_HOSTNAME=<hostname> \
     -e UMASK=<umask for created files> \
     -e WEBUI_PORT=<port> \
     -e PUID=<uid for user> \
