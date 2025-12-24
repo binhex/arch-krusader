@@ -186,38 +186,15 @@ install_paths=$(echo "${install_paths}" | tr ',' ' ')
 # set permissions for container during build - Do NOT double quote variable for install_paths otherwise this will wrap space separated paths as a single string
 chmod -R 775 ${install_paths}
 
-# create file with contents of here doc, note EOF is NOT quoted to allow us to expand current variable 'install_paths'
-# we use escaping to prevent variable expansion for PUID and PGID, as we want these expanded at runtime of init.sh
+# In install.sh heredoc, replace the chown section:
 cat <<EOF > /tmp/permissions_heredoc
-
-# get previous puid/pgid (if first run then will be empty string)
-previous_puid=\$(cat "/root/puid" 2>/dev/null || true)
-previous_pgid=\$(cat "/root/pgid" 2>/dev/null || true)
-
-# if first run (no puid or pgid files in /tmp) or the PUID or PGID env vars are different
-# from the previous run then re-apply chown with current PUID and PGID values.
-if [[ ! -f "/root/puid" || ! -f "/root/pgid" || "\${previous_puid}" != "\${PUID}" || "\${previous_pgid}" != "\${PGID}" ]]; then
-
-	# set permissions inside container - Do NOT double quote variable for install_paths otherwise this will wrap space separated paths as a single string
-	chown -R "\${PUID}":"\${PGID}" ${install_paths}
-
-fi
-
-# write out current PUID and PGID to files in /root (used to compare on next run)
-echo "\${PUID}" > /root/puid
-echo "\${PGID}" > /root/pgid
-
-# env var required to find qt plugins when starting krusader
-export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt/plugins/platforms
-
-# env vars required to enable menu icons for krusader (also requires breeze-icons package)
-export KDE_SESSION_VERSION=5 KDE_FULL_SESSION=true
+install_paths="${install_paths}"
 EOF
 
 # replace permissions placeholder string with contents of file (here doc)
 sed -i '/# PERMISSIONS_PLACEHOLDER/{
-	s/# PERMISSIONS_PLACEHOLDER//g
-	r /tmp/permissions_heredoc
+    s/# PERMISSIONS_PLACEHOLDER//g
+    r /tmp/permissions_heredoc
 }' /usr/bin/init.sh
 rm /tmp/permissions_heredoc
 
