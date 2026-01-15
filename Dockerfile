@@ -1,4 +1,4 @@
-FROM binhex/arch-int-gui:latest
+FROM ghcr.io/binhex/arch-int-gui:latest
 LABEL org.opencontainers.image.authors="binhex"
 LABEL org.opencontainers.image.source="https://github.com/binhex/arch-krusader"
 
